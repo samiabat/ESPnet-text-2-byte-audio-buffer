@@ -138,12 +138,18 @@ class ESPnetTextToByte:
 
 if __name__ == "__main__":
     
-    # Initialize model parameters
+    # File paths for the pre-trained model, configuration, and input text
     model_path = "model/train.total_count.ave_10best.pth"
     config_file_path = "model/config.yaml"
     text_file_path = "text.txt"
-    vocoder_tag = "none"
-    device ="cpu"
+
+    # Vocoder tag specifying the type of vocoder to be used
+    # its a voice encoder. it works by separate the carrier signal (which typically represents the spectral content of the voice) and the modulator signal (which represents the characteristics such as pitch and intensity).
+    vocoder_tag = "none" # we can use vocoder_tag Parallel WaveGAN, and MelGAN  
+
+    # Device on which the model will be loaded (default is "cpu")
+    device = "cpu"  # Change to "cuda" for GPU acceleration if a compatible GPU is available
+
     
 
     # Initialize the espnet model
