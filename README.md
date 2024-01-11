@@ -10,9 +10,12 @@ Follow the steps below to set up and run the project:
 ```bash
 # Step 1: Clone the Repository
 git clone https://github.com/samiabat/ESPnet-text-2-byte-audio-buffer.git
+```
 
 # Step 2: Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
 # Step 3: Organize Model Files
 # Create a folder named 'model' in the project root directory.
@@ -22,7 +25,9 @@ pip install -r requirements.txt
 # Create a file named 'text.txt' in the project root directory and add the text you want to synthesize.
 
 # Step 5: Run the Code
+```bash
 python3 ESPnetT2S.py
+```
 
 # Additional Notes
 - The `ESPnetTextToByte` class in `ESPnetT2S.py` handles the text-to-speech conversion and byte array creation.
