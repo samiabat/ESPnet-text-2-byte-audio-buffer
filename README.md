@@ -31,5 +31,4 @@ python3 ESPnetT2S.py
 ## Additional Notes
 - The `ESPnetTextToByte` class in `ESPnetT2S.py` handles the text-to-speech conversion and byte array creation.
 - The `get_byte_data` method in the class writes the byte data to a file named 'audio_byte_file.raw'.
-- The `recreate_audio_from_bytes` method reads the byte file and recreates the audio, saving it as 'recreated_audio.wav'.
 - Adjust the file paths as needed, and feel free to customize the code to suit your requirements.
