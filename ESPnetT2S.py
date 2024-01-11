@@ -1,61 +1,65 @@
 from espnet2.bin.tts_inference import Text2Speech
 from espnet2.utils.types import str_or_none
-from scipy.io.wavfile import write
 import torch
-import numpy as np
 
 class ESPnetTextToByte:
+    '''
+    input: 
+        1, espnet model
+        2, config file
+        3, audio file
+    output:
+        1, audio file as a byte data
+    '''
     def __init__(self):
         self.text2speech = None
-    def build(self, model, config,vocoder_tag):
+    def build(self, model, config,vocoder_tag, device="cpu"):
+        # This function will initialize the text2speech instance
         try:
             self.text2speech = Text2Speech.from_pretrained(
                 model_file=str_or_none(model),
                 train_config=str_or_none(config),
                 vocoder_tag=str_or_none(vocoder_tag),
-                device="cpu"
+                device=device
             )
         except Exception as e:
             raise e
             
-    def remove_new_line(self, text_file):
-        with open(text_file, 'r', encoding='utf-8') as file:
+    def remove_new_line(self, text_file_path):
+        # This function will remove new lines from the text
+        with open(text_file_path, 'r', encoding='utf-8') as file:
             text = file.read().replace('\n', '')
         return text
             
-    def get_wav_data(self, text_file):
-        text = self.remove_new_line(text_file)
+    def get_wav_data(self, text_file_path):
+        # This function will give us a wav data
+        text = self.remove_new_line(text_file_path)
         with torch.no_grad():
             wav = self.text2speech(text)["wav"]
         wavdata = wav.view(-1).cpu().numpy()
         return wavdata
     
-    
-    def get_audio(self, text_file):
-        wavdata = self.get_wav_data(text_file)
-        samplerate = self.text2speech.fs
-        write("audio.wav", samplerate, wavdata)
-        
     def get_byte_data(self, text_file, output_path="audio_byte_file.raw"):
+        # we will get bytefile audio_byte_file.raw
         wavdata = self.get_wav_data(text_file)
         with open(output_path, 'wb') as file:
             file.write(wavdata.tobytes())
+
+
+if __name__ == "__main__":
     
-    # for test pupose
-    def recreate_audio_from_bytes(self, byte_file, output_path="recreated_audio.wav"):
-        with open(byte_file, 'rb') as file:
-            byte_data = file.read()
-        wavdata = np.frombuffer(byte_data, dtype=np.float32)
-        write(output_path, self.text2speech.fs, wavdata)
+    # Initialize model parameters
+    model_path = "model/train.total_count.ave_10best.pth"
+    config_file_path = "model/config.yaml"
+    text_file_path = "text.txt"
+    vocoder_tag = "parallel_wavegan/vctk_parallel_wavegan.v1.long"
 
-espnet = ESPnetTextToByte()
-model_path = "model/train.total_count.ave_10best.pth"
-config_file_path = "model/config.yaml"
-text_file = "text.txt"
-vocoder_tag = "none"
+    # Initialize the espnet model
+    espnet = ESPnetTextToByte()
+    espnet.build(model_path, config_file_path, vocoder_tag)
 
-espnet.build(model_path, config_file_path, vocoder_tag)
-espnet.get_audio(text_file)
-byte_data = espnet.get_byte_data(text_file)
-espnet.recreate_audio_from_bytes("audio_byte_file.raw")
+    # Initialize output file path and and getbyte data
+    output_path = "audio_byte_file.raw"
+    espnet.get_byte_data(text_file_path, output_path)
+
 
