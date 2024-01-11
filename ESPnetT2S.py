@@ -46,16 +46,7 @@ class ESPnetTextToByte:
                 model_file=str_or_none(model),
                 train_config=str_or_none(config),
                 vocoder_tag=str_or_none(vocoder_tag),
-                device=device,
-                threshold=0.5,
-                minlenratio=0.0,
-                maxlenratio=10.0,
-                use_att_constraint=False,
-                backward_window=1,
-                forward_window=3,
-                speed_control_alpha=1.0,
-                noise_scale=0.333,
-                noise_scale_dur=0.333,
+                device=device
             )
         except Exception as e:
             # Raise an exception if an error occurs during TTS model initialization
